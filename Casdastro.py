@@ -3,15 +3,35 @@ from cProfile import label
 from tkinter import *
 from tkinter import ttk
 from tkinter.tix import COLUMN
+import sqlite3
+
 root = Tk()
+
 
 class Funcs():
     def limpa_tela(self):
-        self.Codigo_entry.delete(0, END)
+        self.codigo_entry.delete(0, END)
         self.nome_entry.delete(0, END)
         self.telefone_entry.delete(0, END)
-        self.Cidade_entry.delete(0, END)
-
+        self.cidade_entry.delete(0, END)
+    def conecta_bd(self):
+        self.conn = sqlite3.connect("cadastro.bd")
+        self.cursor = self.conn.cursor(); print("Conectando ao banco de dados") 
+    def desconecta_bd(self):
+        self.conn.close(); print("Desconecta ao banco de dados") 
+    def montaTabelas(self):
+        self.conecta_bd()
+        ###Criação da tabela 
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS cadastros (
+                cod INTEGER PRIMARY KEY,
+                nome CHAR(40) NOT NULL,
+                telefone INTEGER(20),
+                Cidade CHAR(40)                
+            );
+        """)         
+        self.conn.commit();print("Banco de dados criado")
+        self.desconecta_bd()
 from datetime import date
 
 data_atual = date.today()
@@ -25,6 +45,7 @@ class Application(Funcs):
         self.frames_da_tela()
         self.widgets_frame1()
         self.Lista_frame2()
+        self.montaTabelas()
         root.mainloop()
     def tela(self):
         self.root.title("Cadastro")
@@ -58,11 +79,11 @@ class Application(Funcs):
         self.bt_apagar.place(relx=0.6,rely=0.1,relwidth=0.1,relheight=0.15)      
 
         ###Label do codigo
-        self.lb_Codigo=Label(self.frame_1, text="Código",bg="#F4A460",font= ("verdana",10, "bold" ))
-        self.lb_Codigo.place(relx=0.1, rely=0.1)
+        self.lb_codigo=Label(self.frame_1, text="Código",bg="#F4A460",font= ("verdana",10, "bold" ))
+        self.lb_codigo.place(relx=0.1, rely=0.1)
         
-        self.Codigo_entry = Entry(self.frame_1)
-        self.Codigo_entry.place(relx=0.05, rely=0.18, relwidth= 0.10)
+        self.codigo_entry = Entry(self.frame_1)
+        self.codigo_entry.place(relx=0.05, rely=0.18, relwidth= 0.10)
 
         ###Label nome 
         self.lb_nome=Label(self.frame_1, text="Nome",bg="#F4A460",font= ("verdana",10, "bold" ))
@@ -79,11 +100,11 @@ class Application(Funcs):
         self.telefone_entry.place(relx=0.05, rely=0.6, relwidth= 0.4)
 
         ###Label Cidade 
-        self.lb_Cidede=Label(self.frame_1, text="Cidade",bg="#F4A460",font= ("verdana",10, "bold" ))
-        self.lb_Cidede.place(relx=0.5, rely=0.5)
+        self.lb_cidede=Label(self.frame_1, text="Cidade",bg="#F4A460",font= ("verdana",10, "bold" ))
+        self.lb_cidede.place(relx=0.5, rely=0.5)
         
-        self.Cidade_entry = Entry(self.frame_1)
-        self.Cidade_entry.place(relx=0.5, rely=0.6, relwidth= 0.4)
+        self.cidade_entry = Entry(self.frame_1)
+        self.cidade_entry.place(relx=0.5, rely=0.6, relwidth= 0.4)
         
         self.lb_horas=Label(self.frame_1, text= ('São Paulo - SP - ' + str(data_atual)) ,bg="#F4A460",font= ("verdana",10, "bold" ))
         self.lb_horas.place(relx=0.1, rely=0.7)
@@ -91,7 +112,7 @@ class Application(Funcs):
     def Lista_frame2(self):
         self.listCAD =ttk.Treeview(self.frame_2, height= 3,column= ("col1", "col2", "col3", "col4"))
         self.listCAD.heading("#0", text="")
-        self.listCAD.heading("#1", text="Codigo")
+        self.listCAD.heading("#1", text="Código")
         self.listCAD.heading("#2", text="Nome")
         self.listCAD.heading("#3", text="Telefone")
         self.listCAD.heading("#4", text="Cidade")
