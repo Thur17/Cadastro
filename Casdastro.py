@@ -25,6 +25,18 @@ class Relatorios():
         self.telefoneRel = self.telefone_entry.get()
         self.cidadeRel = self.cidade_entry.get()
         
+        self.c.setFont("Helvetica-Bold", 20 )
+        self.c.drawString(200, 790, 'Cadastro' )
+        
+        self.c.setFont("Helvetica-Bold", 15 )
+        self.c.drawString(50, 690, 'cod:' + self.codRel)
+        self.c.drawString(50, 660, 'nome:' + self.nomeRel )
+        self.c.drawString(50, 630, 'telefone:'+ self.telefoneRel )
+        self.c.drawString(50, 600, 'Cidade:' + self.cidadeRel)
+        
+        self.c.showPage()
+        self.c.save()
+        self.printCadastro()
 
 class Funcs():
     def limpa_tela(self):
@@ -108,7 +120,7 @@ data_atual = date.today()
 print('São Paulo - SP - ' + str(data_atual))
 
 
-class Application(Funcs):
+class Application(Funcs, Relatorios):
 
     def __init__(self):
         self.root = root   
@@ -208,9 +220,11 @@ class Application(Funcs):
         def Quit(): self.root.destroy()
         
         menubar.add_cascade(label = "Opções ", menu = filemenu)
-        menubar.add_cascade(label = "Sobre ", menu = filemenu2)
+        menubar.add_cascade(label = "Relatorios ", menu = filemenu2)
         
         filemenu.add_command(label= "Sair", command= Quit)
-        filemenu.add_command(label= "limpa Cadastro", command= self.limpa_tela )
+        filemenu.add_command(label= "limpa Cadastro", command= self.limpa_tela)
+        
+        filemenu2.add_command(label= "Ficha cadastro", command= self.geraRelatorioCad)
         
 Application()
