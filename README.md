@@ -16,7 +16,7 @@ A proposta do projeto cadastro de usuário é criar um banco de dados onde podem
 [![web 1](https://raw.githubusercontent.com/Thur17/Cadastro/master/assets/img/Cadastro%2002.gif)]()
 
 ## Tecnologia utilizada <h1>
-<h1>
+
 Python
 
 <div>
